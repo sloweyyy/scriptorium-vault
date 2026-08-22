@@ -38,3 +38,4 @@ _Maintained by Curator._
 ## Lessons
 
 - [[_lessons/L-001-example|Rule]]
+- [[_lessons/L-001-highlight-irreversible-actions-as-explic|L-001-highlight-irreversible-actions-as-explic]]
