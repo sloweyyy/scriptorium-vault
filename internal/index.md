@@ -17,17 +17,7 @@ _Maintained by Curator._
 
 ## Reference (retrieved sources)
 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- _…and 53 more in `reference/`_
+- _none yet_
 
 ## Open gaps
 
