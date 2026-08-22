@@ -4,5 +4,7 @@
   "installCommand": "npm ci",
   "outputDirectory": "public",
   "framework": null,
-  "ignoreCommand": "git diff --quiet HEAD^ HEAD -- ../../internal ."
+  "ignoreCommand": "git diff --quiet HEAD^ HEAD -- ../../internal .",
+  "cleanUrls": true,
+  "trailingSlash": false
 }
