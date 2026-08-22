@@ -15,7 +15,11 @@ export async function glob(
     await globby(pattern, {
       cwd,
       ignore: ignorePatterns,
-      gitignore: true,
+      // LOCAL CHANGE (scriptorium-vault): upstream passes `gitignore: true`.
+      // `content/` here is a build-time mirror of the repo's `internal/` tree and
+      // is deliberately gitignored, so honouring .gitignore would make Quartz
+      // find zero input files. `ignorePatterns` from quartz.config.ts still applies.
+      gitignore: false,
     })
   ).map(toPosixPath)
   return fps as FilePath[]

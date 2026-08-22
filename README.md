@@ -51,9 +51,16 @@ directory is a copy of `jackyzha0/quartz` branch `v4` at commit
 **`d25a6eabf96751ffca56f8a8139272def7a65041`** (package version `4.5.2`,
 2026-04-20), with `.git/`, `.github/`, and Quartz's own `docs/` removed. Upstream
 `LICENSE.txt` is kept. To upgrade, re-vendor from that repo and re-apply the local
-changes: the `build`/`serve` scripts in `package.json`, `scripts/sync-content.mjs`,
-`vercel.json`, and the `pageTitle` / `analytics` / `baseUrl` / `ignorePatterns`
-edits in `quartz.config.ts`.
+changes, all of which carry a comment saying so:
+
+- the `build` / `serve` scripts in `package.json`, and `scripts/sync-content.mjs`
+- `vercel.json`
+- `quartz.config.ts`: `pageTitle`, `analytics`, `baseUrl`, `ignorePatterns`, and
+  dropping `"git"` from `CreatedModifiedDate`'s priority list
+- `quartz/util/glob.ts`: `gitignore: false`. Upstream globs content with
+  `gitignore: true`, which finds **zero** files here — `content/` is a build-time
+  mirror and is gitignored on purpose. Without this the internal site builds
+  successfully and publishes nothing. `ignorePatterns` still applies.
 
 Quartz is used here specifically because it is Obsidian-native: it renders
 `[[wikilinks]]`, backlinks, and the graph view from the markdown as-is, which is

@@ -42,5 +42,5 @@ if (pages.length === 0) {
 
 await rm(destination, { recursive: true, force: true })
 await mkdir(destination, { recursive: true })
-await cp(source, destination, { recursive: true, dereference: true })
+await cp(source, destination, { recursive: true, dereference: true, preserveTimestamps: true })
 console.log(`[sync-content] ${source} -> ${destination}`)
