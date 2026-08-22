@@ -8,11 +8,12 @@ _Maintained by Curator._
 
 ## PRDs
 
-- _none yet_
+- [[prd/scheduled-maintenance-announcements|Scheduled maintenance announcements]]
 
 ## Designs
 
-- _none yet_
+- 
+- 
 
 ## Reference (retrieved sources)
 

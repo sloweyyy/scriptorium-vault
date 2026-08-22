@@ -3,9 +3,12 @@ kind: doc
 title: Scheduled Maintenance Announcements
 status: published
 feature: Scheduled Maintenance Announcements
+source: '[[prd/scheduled-maintenance-announcements]]'
 approved_by: Truong (smoke test)
 jira_issue: DOC-1
 published_at: '2026-08-22T11:35:15.295Z'
+related:
+  - '[[prd/scheduled-maintenance-announcements]]'
 ---
 # Scheduled Maintenance Announcements
 
