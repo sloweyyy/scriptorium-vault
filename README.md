@@ -93,9 +93,11 @@ The agent pushes with a repo-scoped deploy key. Approved external docs land on a
 per-ticket branch and reach `main` only when a human merges the pull request, so
 the public site moves on merge, never on the agent's push — Vercel builds each of
 those branches as a **preview deployment**, which is the reviewable artifact for
-the PR. The internal tree is pushed straight to `main` and is live immediately.
+the PR. The internal tree lives on `vault-live`, which is the internal project's
+production branch, so a push there is live immediately — see
+[Changing anything under `sites/` takes two commits](#changing-anything-under-sites-takes-two-commits).
 
-Because both projects watch the same `main`, each site declares an
+Because both projects build from this one repository, each site declares an
 `ignoreCommand` in its `vercel.json` so it rebuilds only when its own tree or its
 own site directory changed:
 
@@ -150,6 +152,10 @@ Two environment variables on the internal Vercel project supply the credentials:
 | `INTERNAL_SITE_USER` | the username the site prompts for |
 | `INTERNAL_SITE_PASSWORD` | the password |
 
+Both are stored encrypted on the project and are readable back by anyone with
+access to it (Vercel dashboard → Settings → Environment Variables), so the
+credentials are recoverable without being written down anywhere in this repo.
+
 Nothing is hardcoded and there is no default. **The gate fails closed:** if
 either variable is unset or empty, the middleware serves no content at all — it
 answers `503` and says the site is misconfigured. A missing password never means
@@ -166,10 +172,12 @@ Two things to know when operating it:
 
 - **Rotating the password needs a redeploy.** Vercel injects environment
   variables into the middleware bundle at build time, so editing the variable in
-  the dashboard does nothing until the internal project builds again.
+  the dashboard does nothing until the internal project builds again. Verified:
+  with the variable changed and no rebuild, the *old* password still authenticated
+  and the new one did not. Change the value, then redeploy, then confirm.
 - **Preview deployments need the variables too.** They are set for both
-  Production and Preview; a preview with only production values set would be an
-  ungated copy of the same content on a guessable URL.
+  Production and Preview, so a preview build is gated by the same credentials
+  instead of answering 503 to everyone including its reviewer.
 
 ## Changing anything under `sites/` takes two commits
 
