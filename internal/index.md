@@ -4,11 +4,13 @@ _Maintained by Curator._
 
 ## Product docs
 
+- [[docs/incident-timeline-embed|Incident Timeline Embed]]
 - [[docs/scheduled-maintenance-announcements|Scheduled Maintenance Announcements]]
 - [[docs/status-page-subscriber-management|Status page subscriber management]]
 
 ## PRDs
 
+- [[prd/incident-timeline-embed|Incident timeline embed]]
 - [[prd/scheduled-maintenance-announcements|Scheduled maintenance announcements]]
 - [[prd/status-page-subscriber-management|Status page subscriber management]]
 
