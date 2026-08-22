@@ -3,5 +3,6 @@
   "buildCommand": "npm run build",
   "installCommand": "npm ci",
   "outputDirectory": "dist",
-  "framework": "astro"
+  "framework": "astro",
+  "ignoreCommand": "git diff --quiet HEAD^ HEAD -- ../../docs ."
 }

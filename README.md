@@ -87,6 +87,29 @@ needs almost nothing set by hand.
 | Node.js Version | 22.x | 22.x |
 | Include source files outside of the Root Directory | **ON (required)** | **ON (required)** |
 
+### Which pushes deploy which site
+
+The agent pushes with a repo-scoped deploy key. Approved external docs land on a
+per-ticket branch and reach `main` only when a human merges the pull request, so
+the public site moves on merge, never on the agent's push — Vercel builds each of
+those branches as a **preview deployment**, which is the reviewable artifact for
+the PR. The internal tree is pushed straight to `main` and is live immediately.
+
+Because both projects watch the same `main`, each site declares an
+`ignoreCommand` in its `vercel.json` so it rebuilds only when its own tree or its
+own site directory changed:
+
+```
+external:  git diff --quiet HEAD^ HEAD -- ../../docs .
+internal:  git diff --quiet HEAD^ HEAD -- ../../internal .
+```
+
+Exit 1 means build, exit 0 means skip. Anything else — no `HEAD^` on a root
+commit, a shallow clone — is non-zero, so an error deploys rather than silently
+skipping. Do not delete these: a Root Directory alone does not reliably tell
+Vercel that a change *above* it should trigger a build, and the failure mode is
+the agent publishing a doc that never appears on the site.
+
 ### Steps that need a human in the Vercel UI
 
 1. **Set the Root Directory** for each project (Settings → Build and Deployment →
