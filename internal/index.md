@@ -5,10 +5,12 @@ _Maintained by Curator._
 ## Product docs
 
 - [[docs/scheduled-maintenance-announcements|Scheduled Maintenance Announcements]]
+- [[docs/status-page-subscriber-management|Status page subscriber management]]
 
 ## PRDs
 
 - [[prd/scheduled-maintenance-announcements|Scheduled maintenance announcements]]
+- [[prd/status-page-subscriber-management|Status page subscriber management]]
 
 ## Designs
 
@@ -17,7 +19,17 @@ _Maintained by Curator._
 
 ## Reference (retrieved sources)
 
-- _none yet_
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- _…and 53 more in `reference/`_
 
 ## Open gaps
 
@@ -25,4 +37,4 @@ _Maintained by Curator._
 
 ## Lessons
 
-- _none yet_
+- [[_lessons/L-001-example|Rule]]

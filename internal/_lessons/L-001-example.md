@@ -5,7 +5,6 @@ scope: all Beacon docs
 approved_by: Truong Le Vinh Phuc
 source: seed
 ---
-
 ## Rule
 
 State time windows in UTC and give the local-time conversion only as a
