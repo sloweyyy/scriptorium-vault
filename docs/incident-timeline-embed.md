@@ -1,41 +1,42 @@
 ---
 kind: doc
 status: published
-title: Incident timeline embed
-feature: Incident timeline embed
+title: Incident Timeline Embed
+feature: Incident Timeline Embed
 jira_issue: DOC-5
-published_at: '2026-08-22T19:18:13.521Z'
+published_at: '2026-08-22T19:34:36.010Z'
 ---
-# Incident timeline embed
+# Incident Timeline Embed
 
 ## Overview
-The Incident Timeline Embed allows you to display a read-only, real-time incident timeline on any external page, such as a help center. The embed automatically refreshes every 60 seconds without a page reload, displaying the incident title, severity, affected components, and updates with timestamps in the viewer's local timezone. This ensures your external pages stay synchronized with your public status page during active incidents without manual copying.
+The Incident Timeline Embed allows workspace admins to display a read-only, real-time incident timeline on any external website or help center. The embedded timeline automatically refreshes every 60 seconds without a page reload, ensuring your external pages stay in sync with your public status page. All timestamps within the embed automatically render in the viewer's local timezone.
 
 ## Prerequisites
-None.
+* Workspace administrator access.
 
 ## Steps
-1. Navigate to **Settings** → **Status page** → **Embed timeline**.
-2. Select the components you want to scope the embed to. 
+1. Navigate to **Settings** > **Status page** > **Embed timeline**.
+2. Select the specific components you want to scope to this embed. 
 3. Generate the HTML snippet.
    
-   **WARNING:** Regenerating a snippet immediately and irreversibly revokes the previously generated snippet. Any external pages hosting the revoked snippet will immediately display a "timeline unavailable" placeholder instead of the timeline.
+   > **WARNING:** Regenerating an embed snippet permanently and irreversibly revokes the previously generated snippet. Any external pages hosting the revoked snippet will immediately display a "timeline unavailable" placeholder instead of the incident timeline.
 
-4. Copy the generated HTML snippet and paste it into the code of your external page.
+4. Copy the generated HTML snippet.
+5. Paste the snippet into the HTML code of your external hosting page.
 
 ## FAQ
 
 **Does the embed require viewers to authenticate?**
-No. The embed works with no authentication and only displays information that is already publicly visible on your status page.
+No. The embed works with no authentication and will only display information that is already publicly visible on your status page.
 
-**What timezone are the timestamps displayed in?**
-All timestamps in the embed render automatically in the viewer's local timezone.
+**Can viewers make changes to the incident timeline from the embed?**
+No. The embed is strictly read-only and does not support write access of any kind. Additionally, the component scope is baked into the snippet at generation time and cannot be edited by the hosting page.
 
-**Can I customize the theme of the embed?**
-The embed supports automatic light and dark mode detection. Further custom theming is not supported.
+**What information is displayed in the embed?**
+The embed displays the current incident timeline, including the incident title, severity, affected components, and each update with its timestamp.
 
-**Can we display historical incidents?**
-No. Historical incidents older than 90 days are not supported and will not be displayed in the embed.
+**Are historical incidents displayed in the embed?**
+No. Historical incidents older than 90 days are not supported and will not be displayed.
 
 ## Related articles
 * [Status page overview](status-page-overview)
