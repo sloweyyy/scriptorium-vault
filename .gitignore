@@ -1,0 +1,25 @@
+# dependencies
+node_modules/
+
+# build output
+dist/
+.astro/
+sites/internal/public/
+.quartz-cache/
+tsconfig.tsbuildinfo
+prof/
+
+# content mirrored in by each site's prebuild step — never committed, the trees
+# at docs/ and internal/ are the source of truth
+sites/external/src/content/docs/
+sites/internal/content/
+
+# deploy + local
+.vercel/
+.env
+.env.*
+!.env.example
+
+# os / editor
+.DS_Store
+.obsidian/
