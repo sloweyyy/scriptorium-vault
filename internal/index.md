@@ -37,5 +37,5 @@ _Maintained by Curator._
 
 ## Lessons
 
-- [[_lessons/L-001-example|Rule]]
-- [[_lessons/L-001-highlight-irreversible-actions-as-explic|L-001-highlight-irreversible-actions-as-explic]]
+- [[_lessons/L-001-always-specify-the-timezone|L-001-always-specify-the-timezone]]
+- [[_lessons/L-002-highlight-irreversible-actions|L-002-highlight-irreversible-actions]]
