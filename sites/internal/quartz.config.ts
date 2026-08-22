@@ -87,8 +87,13 @@ const config: QuartzConfig = {
       Plugin.Static(),
       Plugin.Favicon(),
       Plugin.NotFoundPage(),
-      // Comment out CustomOgImages to speed up build time
-      Plugin.CustomOgImages(),
+      // CustomOgImages is deliberately disabled: it is the only part of the
+      // build that reaches the network (it fetches webfonts from Google to
+      // render each page's social-preview image) and it fails the whole build
+      // when that fetch fails. This site is deployment-protected and never
+      // shared as a link preview, so the images buy nothing and the network
+      // dependency is pure fragility. Re-enable only if that changes.
+      // Plugin.CustomOgImages(),
     ],
   },
 }

@@ -99,6 +99,14 @@ needs almost nothing set by hand.
    Deployment Protection (Vercel Authentication, or a password) for the internal
    project. Nothing in this repo can enforce that for you.
 4. Leave install/build/output unset in the UI — `vercel.json` supplies them.
+5. If `npm ci` fails on the internal project with an engine error, pick the
+   newest available Node 22.x: the vendored Quartz `.npmrc` sets
+   `engine-strict=true` and its `engines` field requires `npm >=10.9.2`.
+6. On the first deploy of each project, confirm Vercel's system environment
+   variables are exposed — both sites derive their canonical URL from
+   `VERCEL_PROJECT_PRODUCTION_URL` and silently fall back to `localhost` without
+   it. Check `sitemap-0.xml` on the external site and any page's canonical tag on
+   the internal one.
 
 ## Local builds
 
@@ -109,7 +117,12 @@ cd sites/external && npm ci && npm run build   # -> sites/external/dist
 cd sites/internal && npm ci && npm run build   # -> sites/internal/public
 ```
 
-Both are offline builds once dependencies are installed.
+Both build with no network access once dependencies are installed (verified with
+outbound connections blocked). Quartz's `CustomOgImages` emitter is disabled in
+`quartz.config.ts` for exactly that reason — it fetches webfonts from Google to
+render social-preview images and fails the entire build if it cannot, which is a
+poor trade for a deployment-protected internal site. Pages still link the Google
+Fonts stylesheet at *view* time; that is a runtime request, not a build one.
 
 ## No secrets
 
