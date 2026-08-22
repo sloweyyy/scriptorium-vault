@@ -5,8 +5,8 @@ title: Status page subscriber management
 feature: Status page subscriber management
 jira_issue: DOC-4
 source: '[[prd/status-page-subscriber-management]]'
-approved_by: Truong Le Vinh Phuc
-published_at: '2026-08-22T18:06:21.198Z'
+approved_by: Scribe
+published_at: '2026-08-22T18:41:10.423Z'
 related:
   - '[[prd/status-page-subscriber-management]]'
 ---
@@ -19,13 +19,13 @@ Status page subscriber management allows workspace admins to view, audit, and co
 * You must be a workspace admin.
 
 ## Steps
-1. Navigate to **Subscribers → Manage** in the admin console to view the subscriber list, which displays each subscriber's email, followed components, delivery mode, and subscription date.
+1. Navigate to **Subscribers → Manage** in the admin console to view the subscriber list.
 2. Click the export option to download the subscriber list as a CSV file.
 3. Click the invite option to open the subscriber invitation interface.
 4. Enter up to 50 email addresses into the invitation field.
-5. Send the invitations to dispatch confirmation emails to the entered addresses.
-6. Click the remove option next to a subscriber's entry to immediately unsubscribe them without notification.
-7. Select the hour of the day for the daily digest delivery.
+5. Click the send option to dispatch confirmation emails to the entered addresses.
+6. Click the remove option next to a subscriber's entry to unsubscribe them.
+7. Select the hour of the day for the daily digest delivery, which uses the selected timezone.
 8. Select the timezone for the daily digest delivery using the timezone selector.
 
 ## FAQ
