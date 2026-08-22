@@ -152,3 +152,14 @@ Fonts stylesheet at *view* time; that is a runtime request, not a build one.
 Nothing in this repo is a credential, and nothing here should become one. The
 sites are static and read no environment variables beyond the `VERCEL_*` values
 Vercel injects to derive the canonical site URL.
+
+## Commit identity is load-bearing
+
+Vercel refuses to build a commit whose author email GitHub cannot associate with a user —
+`readyStateReason: "GitHub could not associate the committer with a GitHub user"`,
+`seatBlock.blockCode: COMMIT_AUTHOR_REQUIRED`. An unassociated author means a published doc
+is blocked from ever reaching the site, with a green pipeline and a silent site.
+
+The agent therefore commits as a GitHub noreply identity
+(`<id>+<login>@users.noreply.github.com`, set via `DOCS_REPO_COMMIT_EMAIL`), which always
+associates. If you push here by hand, use an email verified on your GitHub account.
