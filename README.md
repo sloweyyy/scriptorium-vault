@@ -118,9 +118,12 @@ the agent publishing a doc that never appears on the site.
    Step"** on both. Each build reads a tree above its root (`../../docs`,
    `../../internal`); without this the sync script finds nothing and exits with
    the reason printed in the build log.
-3. **Protect the internal project.** `internal/` is not public content. Turn on
-   Deployment Protection (Vercel Authentication, or a password) for the internal
-   project. Nothing in this repo can enforce that for you.
+3. **Set the internal site's credentials.** `internal/` is not public content;
+   the gate is `sites/internal/middleware.ts` in this repo, and it needs
+   `INTERNAL_SITE_USER` and `INTERNAL_SITE_PASSWORD` set on the internal project
+   (see [The internal site is behind Basic auth](#the-internal-site-is-behind-basic-auth)).
+   Vercel's own Deployment Protection is a paid feature and is *not* what guards
+   this site.
 4. Leave install/build/output unset in the UI — `vercel.json` supplies them.
 5. If `npm ci` fails on the internal project with an engine error, pick the
    newest available Node 22.x: the vendored Quartz `.npmrc` sets
@@ -130,6 +133,56 @@ the agent publishing a doc that never appears on the site.
    `VERCEL_PROJECT_PRODUCTION_URL` and silently fall back to `localhost` without
    it. Check `sitemap-0.xml` on the external site and any page's canonical tag on
    the internal one.
+
+## The internal site is behind Basic auth
+
+`sites/internal/middleware.ts` is a Vercel Routing Middleware that demands HTTP
+Basic authentication on **every** request to the internal site. It is the only
+thing keeping `internal/` off the open web — Vercel's Deployment Protection is a
+paid feature on this account, so the gate lives in the project instead. It must
+sit at the root of the project directory (next to `sites/internal/package.json`),
+which is where Vercel looks for it; moving it elsewhere silently disables it.
+
+Two environment variables on the internal Vercel project supply the credentials:
+
+| Variable | Meaning |
+| --- | --- |
+| `INTERNAL_SITE_USER` | the username the site prompts for |
+| `INTERNAL_SITE_PASSWORD` | the password |
+
+Nothing is hardcoded and there is no default. **The gate fails closed:** if
+either variable is unset or empty, the middleware serves no content at all — it
+answers `503` and says the site is misconfigured. A missing password never means
+"let everyone in", which is the failure mode this whole split exists to prevent.
+A wrong or absent `Authorization` header gets a `401` with `WWW-Authenticate:
+Basic`, so a browser prompts. Credentials are compared in constant time, without
+returning early on the first differing byte.
+
+The one path that is *not* gated is `/robots.txt`, which the middleware serves
+itself as `Disallow: /`. A crawler that only ever sees a `401` has not been told
+to stay out; one that can read the robots file has.
+
+Two things to know when operating it:
+
+- **Rotating the password needs a redeploy.** Vercel injects environment
+  variables into the middleware bundle at build time, so editing the variable in
+  the dashboard does nothing until the internal project builds again.
+- **Preview deployments need the variables too.** They are set for both
+  Production and Preview; a preview with only production values set would be an
+  ungated copy of the same content on a guessable URL.
+
+## Changing anything under `sites/` takes two commits
+
+`sites/` exists on both `main` and `vault-live`, and the two branches otherwise
+diverge on purpose: `main` carries `docs/` and no `internal/`, `vault-live`
+carries `internal/`. The internal Vercel project builds from **`vault-live`**, so
+a site change that only lands on `main` is not live.
+
+Never merge one of these branches into the other — it will try to delete the
+content tree the target branch is missing. Apply the change to `main`, then apply
+the *same* change to `vault-live` as its own commit (`git cherry-pick`, or just
+re-edit by hand). Both branches should end up with identical `sites/` trees;
+`git diff main vault-live -- sites/` is the check, and it should print nothing.
 
 ## Local builds
 
@@ -150,5 +203,7 @@ Fonts stylesheet at *view* time; that is a runtime request, not a build one.
 ## No secrets
 
 Nothing in this repo is a credential, and nothing here should become one. The
-sites are static and read no environment variables beyond the `VERCEL_*` values
-Vercel injects to derive the canonical site URL.
+internal site's Basic auth credentials live only in Vercel's environment
+variables — `sites/internal/middleware.ts` reads them and contains no fallback,
+no default, and no hint of their values. Beyond those, the sites read only the
+`VERCEL_*` values Vercel injects to derive the canonical site URL.
