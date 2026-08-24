@@ -4,6 +4,8 @@ feature: Webhook retry policy
 jira_issue: DOC-12
 source_ticket: 'https://slowey.atlassian.net/browse/DOC-12'
 filed: '2026-08-24T13:48:50.096Z'
+related:
+  - '[[docs/webhook-retry-policy]]'
 ---
 # PRD — Webhook retry policy
 

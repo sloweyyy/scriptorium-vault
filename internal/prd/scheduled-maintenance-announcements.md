@@ -5,9 +5,9 @@ audience: workspace admins
 user_goal: Notify status-page subscribers about planned maintenance before it starts
 status: approved
 owner: pm.beacon
-jira_issue: DOC-1
-source_ticket: 'https://slowey.atlassian.net/browse/DOC-1'
-filed: '2026-08-24T13:48:28.712Z'
+jira_issue: DOC-26
+source_ticket: 'https://slowey.atlassian.net/browse/DOC-26'
+filed: '2026-08-24T14:15:41.545Z'
 related:
   - '[[docs/scheduled-maintenance-announcements]]'
 ---
