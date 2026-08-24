@@ -5,9 +5,9 @@ audience: integrators
 user_goal: see current API rate-limit usage and remaining quota in real time
 status: approved
 owner: pm.beacon
-jira_issue: DOC-10
-source_ticket: 'https://slowey.atlassian.net/browse/DOC-10'
-filed: '2026-08-24T13:08:24.490Z'
+jira_issue: DOC-23
+source_ticket: 'https://slowey.atlassian.net/browse/DOC-23'
+filed: '2026-08-24T13:58:12.774Z'
 related:
   - '[[docs/rate-limit-dashboard]]'
 ---

@@ -3,7 +3,7 @@ kind: prd
 feature: Webhook retry policy
 jira_issue: DOC-12
 source_ticket: 'https://slowey.atlassian.net/browse/DOC-12'
-filed: '2026-08-24T13:00:10.792Z'
+filed: '2026-08-24T13:48:50.096Z'
 ---
 # PRD — Webhook retry policy
 

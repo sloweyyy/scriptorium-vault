@@ -10,6 +10,7 @@ _Maintained by Curator._
 - [[docs/incident-timeline-embed|Incident Timeline Embed]]
 - [[docs/rate-limit-dashboard|Rate limit dashboard]]
 - [[docs/scheduled-maintenance-announcements|Scheduled Maintenance Announcements]]
+- [[docs/session-timeout|Session timeout]]
 - [[docs/status-page-subscriber-management|Status page subscriber management]]
 - [[docs/team-roles-and-permissions|Team roles and permissions]]
 
@@ -20,6 +21,7 @@ _Maintained by Curator._
 - [[prd/incident-timeline-embed|Incident timeline embed]]
 - [[prd/rate-limit-dashboard|Rate limit dashboard]]
 - [[prd/scheduled-maintenance-announcements|Scheduled maintenance announcements]]
+- [[prd/session-timeout|Session timeout]]
 - [[prd/status-page-subscriber-management|Status page subscriber management]]
 - [[prd/team-roles-and-permissions|Team roles and permissions]]
 - [[prd/webhook-retry-policy|Webhook retry policy]]
@@ -47,9 +49,12 @@ _Maintained by Curator._
 
 ## Open gaps
 
+- [[_gaps/G-002-does-beacon-support-single-sign-on-with-okta|G-002-does-beacon-support-single-sign-on-with-okta]]
 
 ## Lessons
 
 - [[_lessons/L-001-always-specify-the-timezone|L-001-always-specify-the-timezone]]
 - [[_lessons/L-002-highlight-irreversible-actions|L-002-highlight-irreversible-actions]]
 - [[_lessons/L-003-end-every-document-with-a-related-artic|L-003-end-every-document-with-a-related-artic]]
+- [[_lessons/L-004-always-specify-the-expiration-duration-o|L-004-always-specify-the-expiration-duration-o]]
+- [[_lessons/L-005-when-documenting-api-metrics-always-spe|L-005-when-documenting-api-metrics-always-spe]]
