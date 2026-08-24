@@ -14,6 +14,7 @@ _Maintained by Curator._
 - [[docs/session-timeout|Session timeout]]
 - [[docs/status-page-subscriber-management|Status page subscriber management]]
 - [[docs/team-roles-and-permissions|Team roles and permissions]]
+- [[docs/users-can-export-their-dashboard-view-as-a-pdf-file-with-a-button-on-the-dashboa|Export Dashboard as PDF]]
 - [[docs/webhook-retry-policy|Webhook retry policy]]
 
 ## PRDs
@@ -26,6 +27,7 @@ _Maintained by Curator._
 - [[prd/session-timeout|Session timeout]]
 - [[prd/status-page-subscriber-management|Status page subscriber management]]
 - [[prd/team-roles-and-permissions|Team roles and permissions]]
+- [[prd/users-can-export-their-dashboard-view-as-a-pdf-file-with-a-button-on-the-dashboa|Users can export their dashboard view as a PDF file, with a button on the dashboard toolbar that generates the file and downloads i]]
 - [[prd/webhook-retry-policy|Webhook retry policy]]
 
 ## Designs
