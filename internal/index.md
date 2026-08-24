@@ -4,6 +4,7 @@ _Maintained by Curator._
 
 ## Product docs
 
+- [[docs/audit-log-csv-export|Audit log CSV export]]
 - [[docs/incident-timeline-embed|Incident Timeline Embed]]
 - [[docs/scheduled-maintenance-announcements|Scheduled Maintenance Announcements]]
 - [[docs/status-page-subscriber-management|Status page subscriber management]]
@@ -35,9 +36,9 @@ _Maintained by Curator._
 
 ## Open gaps
 
-- _none yet_
 
 ## Lessons
 
 - [[_lessons/L-001-always-specify-the-timezone|L-001-always-specify-the-timezone]]
 - [[_lessons/L-002-highlight-irreversible-actions|L-002-highlight-irreversible-actions]]
+- [[_lessons/L-003-end-every-document-with-a-related-artic|L-003-end-every-document-with-a-related-artic]]
