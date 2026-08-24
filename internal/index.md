@@ -9,7 +9,7 @@ _Maintained by Curator._
 - [[docs/bulk-export|Bulk export]]
 - [[docs/incident-timeline-embed|Incident Timeline Embed]]
 - [[docs/rate-limit-dashboard|Rate limit dashboard]]
-- [[docs/scheduled-maintenance-announcements|Scheduled Maintenance Announcements]]
+- [[docs/scheduled-maintenance-announcements|Scheduled maintenance announcements]]
 - [[docs/scheduled-report-export|Scheduled report export]]
 - [[docs/session-timeout|Session timeout]]
 - [[docs/status-page-subscriber-management|Status page subscriber management]]
@@ -53,8 +53,8 @@ _Maintained by Curator._
 
 ## Lessons
 
-- [[_lessons/L-001-always-specify-the-timezone|L-001-always-specify-the-timezone]]
-- [[_lessons/L-002-highlight-irreversible-actions|L-002-highlight-irreversible-actions]]
-- [[_lessons/L-003-end-every-document-with-a-related-artic|L-003-end-every-document-with-a-related-artic]]
-- [[_lessons/L-004-always-specify-the-expiration-duration-o|L-004-always-specify-the-expiration-duration-o]]
-- [[_lessons/L-005-when-documenting-api-metrics-always-spe|L-005-when-documenting-api-metrics-always-spe]]
+- [[_lessons/L-001-always-specify-the-timezone|L-001-always-specify-the-timezone]] — approved, applies to every draft
+- [[_lessons/L-002-highlight-irreversible-actions|L-002-highlight-irreversible-actions]] — approved, applies to every draft
+- [[_lessons/L-003-end-every-document-with-a-related-artic|L-003-end-every-document-with-a-related-artic]] — REJECTED by a human, never apply this
+- [[_lessons/L-004-always-specify-the-expiration-duration-o|L-004-always-specify-the-expiration-duration-o]] — approved, applies to every draft
+- [[_lessons/L-005-when-documenting-api-metrics-always-spe|L-005-when-documenting-api-metrics-always-spe]] — REJECTED by a human, never apply this
