@@ -7,7 +7,7 @@ status: approved
 owner: pm.beacon
 jira_issue: DOC-1
 source_ticket: 'https://slowey.atlassian.net/browse/DOC-1'
-filed: '2026-08-22T20:44:07.225Z'
+filed: '2026-08-24T07:59:16.924Z'
 related:
   - '[[docs/scheduled-maintenance-announcements]]'
 ---
