@@ -1,10 +1,48 @@
 # docloop-vault
 
-The content repository for docloop's two-agent documentation pipeline. An agent
-writes into this repo by pushing markdown; two static sites build from it.
+**The published half of docloop.** An agent writes into this repository by pushing
+markdown; two static sites build from it. There is no application code here — only
+content and the two site builds around it.
 
-There is no application code here — only content and the two site builds around
-it.
+The agents, the pipeline and the guardrails that decide what is allowed to land here
+live in the other repository:
+**[`sloweyyy/docloop`](https://github.com/sloweyyy/docloop#readme)** — start there for
+what the system is and how to exercise it.
+
+## The two repositories
+
+| Repository | What it holds | Who writes it |
+|---|---|---|
+| [`sloweyyy/docloop`](https://github.com/sloweyyy/docloop) | Scribe (Jira) and Curator (Slack), the pipeline, the eval suite, the deployment | humans |
+| **`sloweyyy/docloop-vault`** (this repo) | The public docs tree, the internal vault tree, and the two sites serving them | the agent, by `git push` — and a human, by merging its pull request |
+
+The split is the point. An agent that could push to the repository holding its own code
+could change its own guardrails; here its credential is a repo-scoped deploy key that
+reaches nothing but documentation. Approved public docs arrive on a per-ticket branch and
+reach `main` only when a human merges the pull request — **the agent never pushes `main`.**
+
+## Live
+
+| | Where | |
+|---|---|---|
+| Public docs site | https://docloop-vault.vercel.app/ | built from `main` + `docs/` |
+| Internal vault site | https://docloop-vault-internal.vercel.app/ | built from `vault-live` + `internal/`; HTTP Basic, credentials are not in this repo |
+| Pull requests | [closed PRs](https://github.com/sloweyyy/docloop-vault/pulls?q=is%3Apr+is%3Aclosed) | every public doc arrived through one, merged by a human |
+
+## What to look at first
+
+- **`git log` on `main`** — every commit names the ticket it came from and the human who
+  approved it, in the message (`docs: rate-limit-dashboard (DOC-10, approved by …)`). The
+  author is the agent; the approver is the record. This is the audit trail, and there is no
+  database behind it.
+- **The pull requests** — the reviewable artifact for each publish, opened by the agent's
+  own GitHub App identity and merged by a person.
+- **`internal/_lessons/`** on `vault-live` — every house rule the system proposed, with the
+  human verdict in its frontmatter: `approved`, `rejected` (naming who rejected it and when),
+  or still `proposed`. A rejected rule stays on the shelf as evidence it was judged. This is
+  what "the system learned something" looks like when it is auditable rather than opaque.
+- **`internal/_gaps/`** — questions Curator refused to answer because it could not cite
+  anything. Each one carries the Jira ticket it opened, which is Scribe's next job.
 
 ## The two content trees
 
@@ -37,10 +75,12 @@ preserve them. The script clears its destination first, so a doc deleted from
 - Copies `../../docs` into `src/content/docs/`. The sidebar is derived from that
   file tree, so a doc the agent publishes appears with no config change.
 - Static output, no Vercel adapter.
-- Unresolved `[[wikilinks]]` render as literal text and cannot break the build.
-  `docs/scheduled-maintenance.md` links to a target that does not exist, on
-  purpose, to hold that guarantee. **Do not add `remark-wiki-link` or a similar
-  plugin** — resolving wikilinks is what would make an unresolved one fail.
+- Unresolved `[[wikilinks]]` render as literal text and cannot break the build. That
+  matters because the vault is wikilink-native and a published doc may point at a note that
+  only exists on the internal side. **Do not add `remark-wiki-link` or a similar plugin** —
+  resolving wikilinks is exactly what would make an unresolved one fail the build. (An
+  earlier scaffold page here carried a deliberately broken link as a canary; it was removed
+  once real docs started arriving through the pipeline.)
 - Until the agent publishes a `docs/index.md`, the sync script generates a
   placeholder homepage listing the top-level docs, so `/` is a page and not a 404.
 
@@ -95,7 +135,7 @@ the public site moves on merge, never on the agent's push — Vercel builds each
 those branches as a **preview deployment**, which is the reviewable artifact for
 the PR. The internal tree lives on `vault-live`, which is the internal project's
 production branch, so a push there is live immediately — see
-[Changing anything under `sites/` takes two commits](#changing-anything-under-sites-takes-two-commits).
+[Which branch carries which site](#which-branch-carries-which-site).
 
 Because both projects build from this one repository, each site declares an
 `ignoreCommand` in its `vercel.json` so it rebuilds only when its own tree or its
@@ -179,18 +219,32 @@ Two things to know when operating it:
   Production and Preview, so a preview build is gated by the same credentials
   instead of answering 503 to everyone including its reviewer.
 
-## Changing anything under `sites/` takes two commits
+## Which branch carries which site
 
-`sites/` exists on both `main` and `vault-live`, and the two branches otherwise
-diverge on purpose: `main` carries `docs/` and no `internal/`, `vault-live`
-carries `internal/`. The internal Vercel project builds from **`vault-live`**, so
-a site change that only lands on `main` is not live.
+The two branches diverge on purpose: `main` carries `docs/` and no `internal/`,
+`vault-live` carries `internal/` and no `docs/`. **Never merge one into the other**
+— it will try to delete the content tree the target branch is missing.
 
-Never merge one of these branches into the other — it will try to delete the
-content tree the target branch is missing. Apply the change to `main`, then apply
-the *same* change to `vault-live` as its own commit (`git cherry-pick`, or just
-re-edit by hand). Both branches should end up with identical `sites/` trees;
-`git diff main vault-live -- sites/` is the check, and it should print nothing.
+Both `sites/external` and `sites/internal` exist on *every* branch, but only one of
+them is real on any given branch:
+
+| | `sites/external` | `sites/internal` |
+| --- | --- | --- |
+| `main` (and the agent's `docs/*` branches) | the real Astro site | a stub: `{"git": {"deploymentEnabled": false}}` |
+| `vault-live` | the same stub | the real Quartz site |
+
+The stubs are load-bearing, and each carries a `README.md` saying so. Vercel clones
+*both* projects on *every* push, and a project whose Root Directory does not exist
+fails the build before any ignore rule can run. The directory therefore exists
+everywhere; where the site does not belong, all it holds is deployments-off.
+
+So a change to a site is a single commit, on the branch where that site is real:
+`sites/external` on `main`, `sites/internal` on `vault-live`. Nothing needs
+cherry-picking between them.
+
+**What does need to be identical on both branches is this README.** It exists on
+each, and a reader arriving from the internal site lands on `vault-live`'s copy.
+`git diff main vault-live -- README.md` is the check, and it should print nothing.
 
 ## Local builds
 
