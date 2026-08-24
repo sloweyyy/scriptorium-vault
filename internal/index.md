@@ -9,6 +9,7 @@ _Maintained by Curator._
 - [[docs/bulk-export|Bulk export]]
 - [[docs/incident-timeline-embed|Incident Timeline Embed]]
 - [[docs/rate-limit-dashboard|Rate limit dashboard]]
+- [[docs/scheduled-digest-emails|Scheduled digest emails]]
 - [[docs/scheduled-maintenance-announcements|Scheduled maintenance announcements]]
 - [[docs/scheduled-report-export|Scheduled report export]]
 - [[docs/session-timeout|Session timeout]]
@@ -23,6 +24,7 @@ _Maintained by Curator._
 - [[prd/bulk-export|Bulk export]]
 - [[prd/incident-timeline-embed|Incident timeline embed]]
 - [[prd/rate-limit-dashboard|Rate limit dashboard]]
+- [[prd/scheduled-digest-emails|Scheduled digest emails]]
 - [[prd/scheduled-maintenance-announcements|Scheduled maintenance announcements]]
 - [[prd/session-timeout|Session timeout]]
 - [[prd/status-page-subscriber-management|Status page subscriber management]]
@@ -32,6 +34,7 @@ _Maintained by Curator._
 
 ## Designs
 
+- 
 - 
 - 
 
