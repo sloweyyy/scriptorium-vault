@@ -8,6 +8,8 @@ owner: pm.beacon
 jira_issue: DOC-10
 source_ticket: 'https://slowey.atlassian.net/browse/DOC-10'
 filed: '2026-08-24T13:08:24.490Z'
+related:
+  - '[[docs/rate-limit-dashboard]]'
 ---
 # PRD — Rate limit dashboard
 

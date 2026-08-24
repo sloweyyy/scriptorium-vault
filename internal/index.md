@@ -6,7 +6,9 @@ _Maintained by Curator._
 
 - [[docs/api-key-rotation|API key rotation]]
 - [[docs/audit-log-csv-export|Audit log CSV export]]
+- [[docs/bulk-export|Bulk export]]
 - [[docs/incident-timeline-embed|Incident Timeline Embed]]
+- [[docs/rate-limit-dashboard|Rate limit dashboard]]
 - [[docs/scheduled-maintenance-announcements|Scheduled Maintenance Announcements]]
 - [[docs/status-page-subscriber-management|Status page subscriber management]]
 - [[docs/team-roles-and-permissions|Team roles and permissions]]

@@ -4,6 +4,8 @@ feature: Bulk export
 jira_issue: DOC-14
 source_ticket: 'https://slowey.atlassian.net/browse/DOC-14'
 filed: '2026-08-24T13:11:27.554Z'
+related:
+  - '[[docs/bulk-export]]'
 ---
 # PRD — Bulk export
 
