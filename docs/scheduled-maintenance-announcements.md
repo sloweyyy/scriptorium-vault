@@ -1,41 +1,40 @@
 ---
 kind: doc
 status: published
-title: Scheduled Maintenance Announcements
-feature: Scheduled Maintenance Announcements
-jira_issue: DOC-26
-published_at: '2026-08-24T14:29:49.173Z'
+title: Scheduled maintenance announcements
+feature: Scheduled maintenance announcements
+jira_issue: DOC-27
+published_at: '2026-08-24T15:23:11.139Z'
 ---
-# Scheduled Maintenance Announcements
+# Scheduled maintenance announcements
 
 ## Overview
-Scheduled maintenance announcements allow workspace admins to notify status-page subscribers about planned maintenance windows before they begin. By scheduling these windows in advance, you can proactively communicate service interruptions and maintain subscriber trust. During the active maintenance window, the public status page displays an amber banner and replaces status dots with wrench icons for all affected components.
-
-Note: Maintenance windows are announced at least 48 hours in advance.
+Scheduled maintenance announcements allow workspace admins to notify status-page subscribers about planned maintenance before it begins. By scheduling these windows in advance, you can prevent unexpected support tickets and maintain subscriber trust. During the active maintenance window, your public status page displays a maintenance banner, and affected components show a wrench icon instead of a standard status dot.
 
 ## Prerequisites
-* None.
+* You must be a workspace admin to access the admin console.
 
 ## Steps
-1. Navigate to **Announcements** and select **New maintenance** in the Beacon Admin console.
-2. Enter a name in the **Title** field (maximum of 120 characters).
-3. Enter the scheduled start date and time in the **Start** field, and select the applicable timezone from the **Timezone** dropdown (which defaults to your workspace timezone, such as Asia/Ho_Chi_Minh).
-4. Enter the scheduled end date and time in the **End** field, ensuring the end time is set after the start time in the selected timezone.
-5. Under **Affected components**, select the checkboxes for the components impacted by this maintenance (you must select at least one component).
-6. (Optional) Provide additional details in the **Description (optional)** text box.
-7. Choose whether to keep the **Notify subscribers** toggle enabled (on by default, which sends an email to subscribers upon publication and a reminder email 1 hour before the scheduled start time in the selected timezone).
-8. Click **Publish** to schedule the maintenance.
+1. Navigate to **Announcements** › **New maintenance** in the admin console.
+2. Enter a **Title** (maximum of 120 characters) to describe the planned maintenance.
+3. Enter the **Start** date and time and the **End** date and time, ensuring the end time is after the start time (for example, starting at 2026-08-20 01:00 Asia/Ho_Chi_Minh and ending at 2026-08-20 03:00 Asia/Ho_Chi_Minh).
+4. Select the appropriate timezone from the **Timezone** dropdown, which defaults to your workspace timezone.
+5. Select the **Severity** level (Minor, Major, or Critical) from the dropdown.
+6. Under **Affected components**, select the checkboxes for the components impacted by this maintenance.
+7. (Optional) Enter additional details in the **Description (optional)** text box.
+8. Toggle **Notify subscribers** on (default) or off to control email notifications, which are sent upon publishing and as a reminder 24 hours before the start time (for example, 2026-08-19 01:00 Asia/Ho_Chi_Minh).
+9. Click **Publish** to schedule the maintenance, or click **Save as draft** to save the announcement without publishing it.
 
 ## FAQ
 
-**What changes on the public status page during the maintenance window?**
-Between the scheduled start and end times, the public status page displays an amber maintenance banner showing the title and the time window rendered in the visitor's local timezone. Additionally, the status dots for all selected affected components are replaced with a wrench icon.
+**What do subscribers see on the status page during the maintenance window?**
+Between the scheduled start and end times, the public status page displays an amber maintenance banner showing the title and the time window rendered in the visitor's local timezone (for example, 2026-08-20 01:00 Asia/Ho_Chi_Minh). Additionally, any affected components will display a wrench icon instead of their standard status dot.
 
-**When are subscribers notified about scheduled maintenance?**
-If the "Notify subscribers" toggle is enabled, subscribers receive an email notification immediately when the announcement is published, followed by a reminder email 1 hour before the scheduled start time (in the selected timezone).
+**Can I edit or cancel a maintenance announcement after it has been published?**
+Yes. You can edit or cancel a maintenance announcement at any time until its scheduled end time.
 
-**Can I edit or cancel a scheduled maintenance announcement?**
-Yes. You can edit or cancel an announcement at any time until its scheduled end time in the selected timezone. If you cancel the maintenance, subscribers will be notified only if the initial start notification has already been sent.
+**Will subscribers be notified if I cancel a scheduled maintenance?**
+Subscribers will receive a cancellation email notification only if the initial start notification has already been sent.
 
-**Can I schedule recurring maintenance windows or send notifications via SMS?**
-No. Recurring maintenance windows, SMS notifications, and webhook notifications are not supported. Notifications are sent via email only.
+**What notification channels are supported for maintenance announcements?**
+Only email notifications are supported. SMS, webhooks, and recurring maintenance windows are currently out of scope.
