@@ -40,5 +40,3 @@ No. Historical incidents older than 90 days are not supported and will not be di
 
 ## Related articles
 * [Status page overview](status-page-overview)
-
-Note: embeds render fastest from a CDN-cached page.
