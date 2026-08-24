@@ -64,3 +64,4 @@ _Maintained by Curator._
 - [[_lessons/L-003-end-every-document-with-a-related-artic|L-003-end-every-document-with-a-related-artic]] — REJECTED by a human, never apply this
 - [[_lessons/L-004-always-specify-the-expiration-duration-o|L-004-always-specify-the-expiration-duration-o]] — approved, applies to every draft
 - [[_lessons/L-005-when-documenting-api-metrics-always-spe|L-005-when-documenting-api-metrics-always-spe]] — REJECTED by a human, never apply this
+- [[_lessons/L-006-place-validation-rules-as-explicit-notes|L-006-place-validation-rules-as-explicit-notes]] — proposed, not yet judged by a human
