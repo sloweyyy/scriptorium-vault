@@ -4,6 +4,7 @@ _Maintained by Curator._
 
 ## Product docs
 
+- [[docs/api-key-rotation|API key rotation]]
 - [[docs/audit-log-csv-export|Audit log CSV export]]
 - [[docs/incident-timeline-embed|Incident Timeline Embed]]
 - [[docs/scheduled-maintenance-announcements|Scheduled Maintenance Announcements]]
@@ -13,6 +14,7 @@ _Maintained by Curator._
 ## PRDs
 
 - [[prd/api-key-rotation|API key rotation]]
+- [[prd/bulk-export|Bulk export]]
 - [[prd/incident-timeline-embed|Incident timeline embed]]
 - [[prd/rate-limit-dashboard|Rate limit dashboard]]
 - [[prd/scheduled-maintenance-announcements|Scheduled maintenance announcements]]

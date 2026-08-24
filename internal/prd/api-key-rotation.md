@@ -4,6 +4,8 @@ feature: API key rotation
 jira_issue: DOC-17
 source_ticket: 'https://slowey.atlassian.net/browse/DOC-17'
 filed: '2026-08-24T13:01:12.036Z'
+related:
+  - '[[docs/api-key-rotation]]'
 ---
 PRD — API key rotation
 
