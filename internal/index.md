@@ -56,6 +56,7 @@ _Maintained by Curator._
 
 - [[_gaps/G-002-does-beacon-support-single-sign-on-with-okta|G-002-does-beacon-support-single-sign-on-with-okta]]
 - [[_gaps/G-003-what-is-beacon-s-data-retention-period-for-audit-l|G-003-what-is-beacon-s-data-retention-period-for-audit-l]]
+- [[_gaps/G-005-what-is-beacon-s-data-retention-period-for-audit-l|G-005-what-is-beacon-s-data-retention-period-for-audit-l]]
 
 ## Lessons
 
