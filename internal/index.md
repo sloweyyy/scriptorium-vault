@@ -36,7 +36,6 @@ _Maintained by Curator._
 
 - 
 - 
-- 
 
 ## Reference (retrieved sources)
 
