@@ -56,6 +56,7 @@ _Maintained by Curator._
 - [[_gaps/G-002-does-beacon-support-single-sign-on-with-okta|G-002-does-beacon-support-single-sign-on-with-okta]]
 - [[_gaps/G-003-what-is-beacon-s-data-retention-period-for-audit-l|G-003-what-is-beacon-s-data-retention-period-for-audit-l]]
 - [[_gaps/G-005-what-is-beacon-s-data-retention-period-for-audit-l|G-005-what-is-beacon-s-data-retention-period-for-audit-l]]
+- [[_gaps/G-006-what-is-beacon-s-uptime-sla-on-the-enterprise-plan|G-006-what-is-beacon-s-uptime-sla-on-the-enterprise-plan]]
 
 ## Lessons
 
@@ -64,5 +65,5 @@ _Maintained by Curator._
 - [[_lessons/L-003-end-every-document-with-a-related-artic|L-003-end-every-document-with-a-related-artic]] — REJECTED by a human, never apply this
 - [[_lessons/L-004-always-specify-the-expiration-duration-o|L-004-always-specify-the-expiration-duration-o]] — approved, applies to every draft
 - [[_lessons/L-005-when-documenting-api-metrics-always-spe|L-005-when-documenting-api-metrics-always-spe]] — REJECTED by a human, never apply this
-- [[_lessons/L-006-place-validation-rules-as-explicit-notes|L-006-place-validation-rules-as-explicit-notes]] — proposed, not yet judged by a human
+- [[_lessons/L-006-place-validation-rules-as-explicit-notes|L-006-place-validation-rules-as-explicit-notes]] — approved, applies to every draft
 - [[_lessons/L-007-document-only-the-features-and-limitatio|L-007-document-only-the-features-and-limitatio]] — proposed, not yet judged by a human
