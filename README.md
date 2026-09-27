@@ -1,282 +1,130 @@
 # scriptorium-vault
 
-**The published half of scriptorium.** An agent writes into this repository by pushing
-markdown; two static sites build from it. There is no application code here — only
-content and the two site builds around it.
+**The internal half of scriptorium's knowledge plane.** PRDs, gap notes, the agent's
+house rules ("lessons") and an untransformed copy of every published doc — the material
+Curator answers from and Scribe drafts with. An agent writes here by pushing markdown; one
+access-controlled site builds from it. There is no application code here.
 
-The agents, the pipeline and the guardrails that decide what is allowed to land here
-live in the other repository:
-**[`sloweyyy/scriptorium`](https://github.com/sloweyyy/scriptorium#readme)** — start there for
-what the system is and how to exercise it.
-
-## The two repositories
+This repository is private and stays private. The public half — approved product docs,
+published only through human-merged pull requests — is
+**[`sloweyyy/scriptorium-docs`](https://github.com/sloweyyy/scriptorium-docs)**. The two
+live in separate repositories so that nothing in this one can ever reach the public site
+by a merge, a stray branch, or a misconfigured build.
 
 | Repository | What it holds | Who writes it |
 |---|---|---|
-| [`sloweyyy/scriptorium`](https://github.com/sloweyyy/scriptorium) | Scribe (Jira) and Curator (Slack), the pipeline, the eval suite, the deployment | humans |
-| **`sloweyyy/scriptorium-vault`** (this repo) | The public docs tree, the internal vault tree, and the two sites serving them | the agent, by `git push` — and a human, by merging its pull request |
+| `sloweyyy/scriptorium` | Scribe (Jira) and Curator (Slack), the pipeline, the eval suite, the deployment | humans |
+| **`sloweyyy/scriptorium-vault`** (this repo, private) | `internal/` and the internal site | the agent, by `git push` to `vault-live` |
+| [`sloweyyy/scriptorium-docs`](https://github.com/sloweyyy/scriptorium-docs) (public) | `docs/` and the public site | the agent, by pull request — merged by a human |
 
-The split is the point. An agent that could push to the repository holding its own code
-could change its own guardrails; here its credential is a repo-scoped deploy key that
-reaches nothing but documentation. Approved public docs arrive on a per-ticket branch and
-reach `main` only when a human merges the pull request — **the agent never pushes `main`.**
+An agent that could push to the repository holding its own code could change its own
+guardrails; here its credential is a deploy key scoped to this one repository.
 
 ## Live
 
 | | Where | |
 |---|---|---|
-| Public docs site | https://scriptorium-vault.vercel.app/ | built from `main` + `docs/` |
-| Internal vault site | https://scriptorium-vault-internal.vercel.app/ | built from `vault-live` + `internal/`; HTTP Basic, credentials are not in this repo |
-| Pull requests | [closed PRs](https://github.com/sloweyyy/scriptorium-vault/pulls?q=is%3Apr+is%3Aclosed) | every public doc arrived through one, merged by a human |
+| Internal vault site | https://scriptorium-vault-internal.vercel.app/ | built from `vault-live`; HTTP Basic, credentials are not in this repo |
+| Public docs site | https://scriptorium-docs.vercel.app/ | built from `scriptorium-docs` |
 
 ## What to look at first
 
-- **`git log` on `main`** — every commit names the ticket it came from and the human who
-  approved it, in the message (`docs: rate-limit-dashboard (DOC-10, approved by …)`). The
-  author is the agent; the approver is the record. This is the audit trail, and there is no
-  database behind it.
-- **The pull requests** — the reviewable artifact for each publish, opened by the agent's
-  own GitHub App identity and merged by a person.
-- **`internal/_lessons/`** on `vault-live` — every house rule the system proposed, with the
-  human verdict in its frontmatter: `approved`, `rejected` (naming who rejected it and when),
-  or still `proposed`. A rejected rule stays on the shelf as evidence it was judged. This is
-  what "the system learned something" looks like when it is auditable rather than opaque.
+- **`internal/_lessons/`** — every house rule the system proposed, with the human verdict
+  in its frontmatter: `approved`, `rejected` (naming who rejected it and when), or still
+  `proposed`. A rejected rule stays on the shelf as evidence it was judged. This is what
+  "the system learned something" looks like when it is auditable rather than opaque.
 - **`internal/_gaps/`** — questions Curator refused to answer because it could not cite
   anything. Each one carries the Jira ticket it opened, which is Scribe's next job.
+- **`internal/prd/`** — the PRDs each doc was drafted from.
+- **`internal/docs/`** — the vault's own copy of every published doc, wikilinks intact.
+  The agent restores its vault from this tree when a fresh container starts.
+- **`git log`** — every push names the ticket or decision it came from.
 
-## The two content trees
+## Branch
 
-| Tree | Audience | Written by | Served by |
-| --- | --- | --- | --- |
-| `docs/` | **Public.** Approved, human-gated product documentation for Beacon. | the agent, after a human approves the draft | `sites/external` |
-| `internal/` | **Internal only.** PRDs, gap notes, and approved house rules ("lessons"), plus the index that links them. | the agent | `sites/internal` |
+`vault-live` is the only branch and the internal Vercel project's production branch, so a
+push is live immediately. There is no merge gate here on purpose: the audience is internal,
+and losing a lesson approval or a gap note between deploys is the failure this repository
+exists to prevent.
 
-Both trees arrive by `git push` from the agent. Editing them by hand works the
-same way — they are plain markdown directories.
+## `sites/internal` — Quartz v4
 
-`internal/` is never served by the external site. The external build copies
-`docs/` and only `docs/`; nothing in `internal/` is reachable from the public
-site. Keep it that way: publishing internal notes publicly is the one failure
-mode this split exists to prevent.
-
-## The two sites
-
-Each site lives in `sites/*` and builds from the tree above it. Content lives
-outside the site directory, so **every build starts by copying it in** —
-`scripts/sync-content.mjs`, chained into the `build` script rather than run as an
-npm `prebuild` hook so it cannot be skipped by whatever command the host runs.
-Symlinks are deliberately not used: Vercel's build clone does not reliably
-preserve them. The script clears its destination first, so a doc deleted from
-`docs/` or `internal/` disappears from the built site instead of lingering.
-
-### `sites/external` — Astro + Starlight
-
-- Astro `7.2.4`, `@astrojs/starlight` `0.41.7` (pinned exactly; `package-lock.json` committed).
-- Copies `../../docs` into `src/content/docs/`. The sidebar is derived from that
-  file tree, so a doc the agent publishes appears with no config change.
-- Static output, no Vercel adapter.
-- Unresolved `[[wikilinks]]` render as literal text and cannot break the build. That
-  matters because the vault is wikilink-native and a published doc may point at a note that
-  only exists on the internal side. **Do not add `remark-wiki-link` or a similar plugin** —
-  resolving wikilinks is exactly what would make an unresolved one fail the build. (An
-  earlier scaffold page here carried a deliberately broken link as a canary; it was removed
-  once real docs started arriving through the pipeline.)
-- Until the agent publishes a `docs/index.md`, the sync script generates a
-  placeholder homepage listing the top-level docs, so `/` is a page and not a 404.
-
-### `sites/internal` — Quartz v4
-
-Quartz is not an npm package; it is consumed by vendoring its repository. This
-directory is a copy of `jackyzha0/quartz` branch `v4` at commit
-**`d25a6eabf96751ffca56f8a8139272def7a65041`** (package version `4.5.2`,
-2026-04-20), with `.git/`, `.github/`, and Quartz's own `docs/` removed. Upstream
-`LICENSE.txt` is kept. To upgrade, re-vendor from that repo and re-apply the local
-changes, all of which carry a comment saying so:
+Quartz is not an npm package; it is consumed by vendoring its repository. This directory
+is a copy of `jackyzha0/quartz` branch `v4` at commit
+**`d25a6eabf96751ffca56f8a8139272def7a65041`** (package version `4.5.2`, 2026-04-20),
+with `.git/`, `.github/`, and Quartz's own `docs/` removed. Upstream `LICENSE.txt` is
+kept. To upgrade, re-vendor from that repo and re-apply the local changes, all of which
+carry a comment saying so:
 
 - the `build` / `serve` scripts in `package.json`, and `scripts/sync-content.mjs`
 - `vercel.json`
 - `quartz.config.ts`: `pageTitle`, `analytics`, `baseUrl`, `ignorePatterns`, and
   dropping `"git"` from `CreatedModifiedDate`'s priority list
 - `quartz/util/glob.ts`: `gitignore: false`. Upstream globs content with
-  `gitignore: true`, which finds **zero** files here — `content/` is a build-time
-  mirror and is gitignored on purpose. Without this the internal site builds
-  successfully and publishes nothing. `ignorePatterns` still applies.
+  `gitignore: true`, which finds **zero** files here — `content/` is a build-time mirror
+  and is gitignored on purpose. Without this the internal site builds successfully and
+  publishes nothing. `ignorePatterns` still applies.
 
-Quartz is used here specifically because it is Obsidian-native: it renders
-`[[wikilinks]]`, backlinks, and the graph view from the markdown as-is, which is
-what makes the internal tree navigable.
+Quartz is used because it is Obsidian-native: it renders `[[wikilinks]]`, backlinks, and
+the graph view from the markdown as-is, which is what makes the internal tree navigable.
 
-- Copies `../../internal` into `content/`.
-- Fails the build loudly if that tree is missing or has no top-level markdown —
-  a silently empty internal site would be worse than a red build.
+- The build copies `../../internal` into `content/` (`scripts/sync-content.mjs`, chained
+  into `build` so no host can skip it). The destination is cleared first, so a deleted note
+  disappears from the site instead of lingering.
+- It fails loudly if that tree is missing or has no top-level markdown — a silently empty
+  internal site would be worse than a red build.
 
 ## Vercel
 
-Two Vercel projects, both importing **this same repository**, each with a
-different Root Directory. Each site's `vercel.json` already carries its install
-command, build command, output directory, and framework preset, so an import
-needs almost nothing set by hand.
+| Setting | Value |
+| --- | --- |
+| Root Directory | `sites/internal` |
+| Framework Preset | Other |
+| Install / Build / Output | from `vercel.json` (`npm ci`, `npm run build`, `public`) |
+| Node.js Version | 22.x |
+| Include source files outside of the Root Directory | **ON (required)** — the build reads `../../internal` |
+| Production branch | `vault-live` |
 
-| Setting | External site | Internal site |
-| --- | --- | --- |
-| Root Directory | `sites/external` | `sites/internal` |
-| Framework Preset | Astro | Other |
-| Install Command | `npm ci` | `npm ci` |
-| Build Command | `npm run build` | `npm run build` |
-| Output Directory | `dist` | `public` |
-| Node.js Version | 22.x | 22.x |
-| Include source files outside of the Root Directory | **ON (required)** | **ON (required)** |
-
-### Which pushes deploy which site
-
-The agent pushes with a repo-scoped deploy key. Approved external docs land on a
-per-ticket branch and reach `main` only when a human merges the pull request, so
-the public site moves on merge, never on the agent's push — Vercel builds each of
-those branches as a **preview deployment**, which is the reviewable artifact for
-the PR. The internal tree lives on `vault-live`, which is the internal project's
-production branch, so a push there is live immediately — see
-[Which branch carries which site](#which-branch-carries-which-site).
-
-Because both projects build from this one repository, each site declares an
-`ignoreCommand` in its `vercel.json` so it rebuilds only when its own tree or its
-own site directory changed:
-
-```
-external:  git diff --quiet HEAD^ HEAD -- ../../docs .
-internal:  git diff --quiet HEAD^ HEAD -- ../../internal .
-```
-
-Exit 1 means build, exit 0 means skip. Anything else — no `HEAD^` on a root
-commit, a shallow clone — is non-zero, so an error deploys rather than silently
-skipping. Do not delete these: a Root Directory alone does not reliably tell
-Vercel that a change *above* it should trigger a build, and the failure mode is
-the agent publishing a doc that never appears on the site.
-
-### Steps that need a human in the Vercel UI
-
-1. **Set the Root Directory** for each project (Settings → Build and Deployment →
-   Root Directory). This is the only thing that distinguishes the two projects.
-2. **Enable "Include source files outside of the Root Directory in the Build
-   Step"** on both. Each build reads a tree above its root (`../../docs`,
-   `../../internal`); without this the sync script finds nothing and exits with
-   the reason printed in the build log.
-3. **Set the internal site's credentials.** `internal/` is not public content;
-   the gate is `sites/internal/middleware.ts` in this repo, and it needs
-   `INTERNAL_SITE_USER` and `INTERNAL_SITE_PASSWORD` set on the internal project
-   (see [The internal site is behind Basic auth](#the-internal-site-is-behind-basic-auth)).
-   Vercel's own Deployment Protection is a paid feature and is *not* what guards
-   this site.
-4. Leave install/build/output unset in the UI — `vercel.json` supplies them.
-5. If `npm ci` fails on the internal project with an engine error, pick the
-   newest available Node 22.x: the vendored Quartz `.npmrc` sets
-   `engine-strict=true` and its `engines` field requires `npm >=10.9.2`.
-6. On the first deploy of each project, confirm Vercel's system environment
-   variables are exposed — both sites derive their canonical URL from
-   `VERCEL_PROJECT_PRODUCTION_URL` and silently fall back to `localhost` without
-   it. Check `sitemap-0.xml` on the external site and any page's canonical tag on
-   the internal one.
+`vercel.json` carries `ignoreCommand: git diff --quiet HEAD^ HEAD -- ../../internal .`,
+so only a change to the content or the site rebuilds. Anything other than exit 0 builds,
+so an error deploys rather than silently skipping.
 
 ## The internal site is behind Basic auth
 
-`sites/internal/middleware.ts` is a Vercel Routing Middleware that demands HTTP
-Basic authentication on **every** request to the internal site. It is the only
-thing keeping `internal/` off the open web — Vercel's Deployment Protection is a
-paid feature on this account, so the gate lives in the project instead. It must
-sit at the root of the project directory (next to `sites/internal/package.json`),
-which is where Vercel looks for it; moving it elsewhere silently disables it.
+`sites/internal/middleware.ts` is a Vercel Routing Middleware that demands HTTP Basic
+authentication on **every** request. It is the only thing keeping `internal/` off the
+open web — Vercel's Deployment Protection is a paid feature on this account, so the gate
+lives in the project instead. It must sit at the root of the project directory, next to
+`package.json`; moving it elsewhere silently disables it.
 
-Two environment variables on the internal Vercel project supply the credentials:
-
-| Variable | Meaning |
+| Variable (on the Vercel project) | Meaning |
 | --- | --- |
 | `INTERNAL_SITE_USER` | the username the site prompts for |
 | `INTERNAL_SITE_PASSWORD` | the password |
 
-Both are stored encrypted on the project and are readable back by anyone with
-access to it (Vercel dashboard → Settings → Environment Variables), so the
-credentials are recoverable without being written down anywhere in this repo.
+Nothing is hardcoded and there is no default. **The gate fails closed:** if either
+variable is unset or empty, the middleware serves no content and answers `503`. A wrong or
+absent `Authorization` header gets a `401` with `WWW-Authenticate: Basic`. Credentials are
+compared in constant time. `/robots.txt` is the one ungated path, served as `Disallow: /`.
 
-Nothing is hardcoded and there is no default. **The gate fails closed:** if
-either variable is unset or empty, the middleware serves no content at all — it
-answers `503` and says the site is misconfigured. A missing password never means
-"let everyone in", which is the failure mode this whole split exists to prevent.
-A wrong or absent `Authorization` header gets a `401` with `WWW-Authenticate:
-Basic`, so a browser prompts. Credentials are compared in constant time, without
-returning early on the first differing byte.
+- **Rotating the password needs a redeploy.** Vercel injects the variables into the
+  middleware bundle at build time; the old password keeps working until the next build.
+- **Preview deployments need the variables too.** They are set for Production and
+  Preview, so a preview is gated by the same credentials instead of answering 503.
 
-The one path that is *not* gated is `/robots.txt`, which the middleware serves
-itself as `Disallow: /`. A crawler that only ever sees a `401` has not been told
-to stay out; one that can read the robots file has.
-
-Two things to know when operating it:
-
-- **Rotating the password needs a redeploy.** Vercel injects environment
-  variables into the middleware bundle at build time, so editing the variable in
-  the dashboard does nothing until the internal project builds again. Verified:
-  with the variable changed and no rebuild, the *old* password still authenticated
-  and the new one did not. Change the value, then redeploy, then confirm.
-- **Preview deployments need the variables too.** They are set for both
-  Production and Preview, so a preview build is gated by the same credentials
-  instead of answering 503 to everyone including its reviewer.
-
-## Which branch carries which site
-
-The two branches diverge on purpose: `main` carries `docs/` and no `internal/`,
-`vault-live` carries `internal/` and no `docs/`. **Never merge one into the other**
-— it will try to delete the content tree the target branch is missing.
-
-Both `sites/external` and `sites/internal` exist on *every* branch, but only one of
-them is real on any given branch:
-
-| | `sites/external` | `sites/internal` |
-| --- | --- | --- |
-| `main` (and the agent's `docs/*` branches) | the real Astro site | a stub: `{"git": {"deploymentEnabled": false}}` |
-| `vault-live` | the same stub | the real Quartz site |
-
-The stubs are load-bearing, and each carries a `README.md` saying so. Vercel clones
-*both* projects on *every* push, and a project whose Root Directory does not exist
-fails the build before any ignore rule can run. The directory therefore exists
-everywhere; where the site does not belong, all it holds is deployments-off.
-
-So a change to a site is a single commit, on the branch where that site is real:
-`sites/external` on `main`, `sites/internal` on `vault-live`. Nothing needs
-cherry-picking between them.
-
-**What does need to be identical on both branches is this README.** It exists on
-each, and a reader arriving from the internal site lands on `vault-live`'s copy.
-`git diff main vault-live -- README.md` is the check, and it should print nothing.
-
-## Local builds
-
-Node 22+ (Quartz requires `>=22`; both builds were verified on Node 24.10).
+## Local build
 
 ```bash
-cd sites/external && npm ci && npm run build   # -> sites/external/dist
 cd sites/internal && npm ci && npm run build   # -> sites/internal/public
 ```
 
-Both build with no network access once dependencies are installed (verified with
-outbound connections blocked). Quartz's `CustomOgImages` emitter is disabled in
-`quartz.config.ts` for exactly that reason — it fetches webfonts from Google to
-render social-preview images and fails the entire build if it cannot, which is a
-poor trade for a deployment-protected internal site. Pages still link the Google
-Fonts stylesheet at *view* time; that is a runtime request, not a build one.
-
-## No secrets
-
-Nothing in this repo is a credential, and nothing here should become one. The
-internal site's Basic auth credentials live only in Vercel's environment
-variables — `sites/internal/middleware.ts` reads them and contains no fallback,
-no default, and no hint of their values. Beyond those, the sites read only the
-`VERCEL_*` values Vercel injects to derive the canonical site URL.
+Node 22+ (the vendored Quartz `.npmrc` sets `engine-strict=true`). The build needs no
+network once dependencies are installed: Quartz's `CustomOgImages` emitter is disabled in
+`quartz.config.ts` because it fetches webfonts at build time.
 
 ## Commit identity is load-bearing
 
-Vercel refuses to build a commit whose author email GitHub cannot associate with a user —
-`readyStateReason: "GitHub could not associate the committer with a GitHub user"`,
-`seatBlock.blockCode: COMMIT_AUTHOR_REQUIRED`. An unassociated author means a published doc
-is blocked from ever reaching the site, with a green pipeline and a silent site.
-
-The agent therefore commits as a GitHub noreply identity
-(`<id>+<login>@users.noreply.github.com`, set via `DOCS_REPO_COMMIT_EMAIL`), which always
-associates. If you push here by hand, use an email verified on your GitHub account.
+Vercel refuses to build a commit whose author email GitHub cannot associate with a user
+(`COMMIT_AUTHOR_REQUIRED`), which would leave a green pipeline and a stale site. The agent
+therefore commits as a GitHub noreply identity (`<id>+<login>@users.noreply.github.com`).
+If you push here by hand, use an email verified on your GitHub account.
